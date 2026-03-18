@@ -1,29 +1,31 @@
 import java.math.BigDecimal;
 
-class AccountSnapshot {
+public class AccountSnapshot {
+
     public static void main(String[] args) {
-        // Variable Declarations
-        String accountId = "ACC-99234";
+
+        String accountId = "CUST-00412";
+        // String constructor is mandatory for financial values —
+        // double literals introduce floating-point drift
         BigDecimal balance = new BigDecimal("15420.75");
         BigDecimal overdraftLimit = new BigDecimal("500.00");
         boolean isVerified = true;
-        int transactionCount = 12;
+        int transactionCount = 13;
 
-        // Print to console
         System.out.println("--- Account Snapshot ---");
-        System.out.println("Account ID: " + accountId);
-        System.out.println("Balance: " + balance);
-        System.out.println("Overdraft Limit: " + overdraftLimit);
-        System.out.println("Verified Status: " + isVerified);
-        System.out.println("Total Transactions: " + transactionCount);
+        System.out.printf("%-20s %s%n",        "Account ID:",      accountId);
+        System.out.printf("%-20s GBP %,10.2f%n", "Balance:",         balance);
+        System.out.printf("%-20s GBP %,10.2f%n", "Overdraft Limit:", overdraftLimit);
+        System.out.printf("%-20s %s%n",        "Verified:",        isVerified);
+        System.out.printf("%-20s %d%n",        "Transactions:",    transactionCount);
 
-        // Verification of BigDecimal subtraction
         BigDecimal result = balance.subtract(overdraftLimit);
-        System.out.println("\nVerification (Balance - Overdraft): " + result);
+        System.out.printf("%n%-20s GBP %,10.2f%n", "After Overdraft:", result);
 
-        // Confirming the result is exactly 14920.75
-        if (result.equals(new BigDecimal("14920.75"))) {
-            System.out.println("Confirmation: The calculation is EXACT.");
+        // compareTo() == 0 is the correct equality check for BigDecimal —
+        // .equals() also compares scale, so "14920.75".equals("14920.750") is false
+        if (result.compareTo(new BigDecimal("14920.75")) == 0) {
+            System.out.println("Verification: EXACT — no floating-point drift.");
         }
     }
 }
